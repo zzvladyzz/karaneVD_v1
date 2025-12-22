@@ -200,7 +200,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  //HAL_ADC_Start_IT(&hadc1);
-	  HAL_Delay(2000);
+
 	  for(;;){
 		  tiempoActual=HAL_GetTick();
 		  if(tiempoActual-tiempoAnterior1>=1003)
