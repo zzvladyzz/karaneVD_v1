@@ -1,0 +1,4 @@
+../Core/Src/LIB_MENU.c:16:6:Tiempo_bloqueante	16	static
+../Core/Src/LIB_MENU.c:40:7:Menu_Navegacion	16	static
+../Core/Src/LIB_MENU.c:70:6:Menu_Ejecucion	4	static
+../Core/Src/LIB_MENU.c:119:6:Menu_Avisos	16	static

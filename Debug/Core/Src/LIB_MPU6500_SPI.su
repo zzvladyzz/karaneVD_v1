@@ -1,0 +1,8 @@
+../Core/Src/LIB_MPU6500_SPI.c:17:6:MPU6500_Read	24	static
+../Core/Src/LIB_MPU6500_SPI.c:46:10:MPU6500_Read_Reg	24	static
+../Core/Src/LIB_MPU6500_SPI.c:55:7:MPU6500_Write_Reg	16	static
+../Core/Src/LIB_MPU6500_SPI.c:63:6:MPU6500_Write	16	static
+../Core/Src/LIB_MPU6500_SPI.c:72:18:MPU6500_Init	136	dynamic
+../Core/Src/LIB_MPU6500_SPI.c:165:18:MPU6500_Scale	56	static
+../Core/Src/LIB_MPU6500_SPI.c:178:8:MPU6500_Pitch	48	static
+../Core/Src/LIB_MPU6500_SPI.c:189:8:MPU6500_Roll	40	static
