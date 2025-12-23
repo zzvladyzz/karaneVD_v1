@@ -100,17 +100,17 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 		ADC_buffer[2]=(uint16_t)ADC_DMA[2];
 		ADC_buffer[3]=(uint16_t)ADC_DMA[3];
 		/*filtramos el boton pulsado en un rango*/
-		if(ADC_buffer[3]>1500 && ADC_buffer[3]<1800)
+		if(ADC_buffer[3]>3900 && ADC_buffer[3]<4100)
 		{
-			ValorBTN=1;
+			ValorBTN=BTN_DERECHA;
 		}
-		else if(ADC_buffer[3]>2000 && ADC_buffer[3]<2300)
+		else if(ADC_buffer[3]>2100 && ADC_buffer[3]<2200)
 				{
-					ValorBTN=2;
+					ValorBTN=BTN_IZQUIERDA;
 				}
-		else if(ADC_buffer[3]>2500 && ADC_buffer[3]<3000)
+		else if(ADC_buffer[3]>2600 && ADC_buffer[3]<2800)
 				{
-					ValorBTN=3;
+					ValorBTN=BTN_ACEPTAR;
 				}
 	}
 }
@@ -212,6 +212,7 @@ int main(void)
 	  if ((tiempoActual-tiempoAnterior)>Delay_BTN) {
 		tiempoAnterior=tiempoActual;
 		HAL_ADC_Start_IT(&hadc1);// iniciamos conversion ADC
+		DEBUG_ADC(ADC_Sensor, ADC_buffer[0], ADC_buffer[1], ADC_buffer[2], ADC_buffer[3]);
 	  }
 
 	  /* Obtenido el valor del BTN y siempre distinto a 0*/
