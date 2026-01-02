@@ -30,12 +30,14 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
 #include "LIB_MPU6500_SPI.h"
 #include "LIB_DEBUG.h"
 #include "LIB_FUNCIONES.h"
 #include "LIB_MENU.h"
 
 #define	Delay_BTN	200		// Tiempo para verificar los ADC por DMA
+#define Delay_LED	20		// Tiempo para apagar LEDs
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,7 +54,6 @@ MPU6500_Init_Values_t 	MPU6500_Datos; //Iniciamos donde se guardaran todos los d
 //MPU6500_float_t	MPU6500_Values_float;
 MPU6500_status_e	MPU6500_Status;
 
-
 /* Variables para los ADC */
 uint32_t ADC_DMA[5];	//datos DMA
 volatile uint16_t ADC_buffer[4]; //datos ya obtenidos y convertidos a 16bits
@@ -67,7 +68,9 @@ uint8_t estadoAnterior_R=0;
 /* Variables para definir tiempo de espera */
 uint32_t tiempoActual=0;
 uint32_t tiempoAnterior=0;
+uint32_t tiempoAnterior_LED=0;
 
+bool	timeValid=false;
 
 /* USER CODE END PD */
 
@@ -190,11 +193,12 @@ int main(void)
   if (MPU6500_Status==MPU6500_fail) {
   	for (;;) {
   		DEBUG_Imprimir("Fallo al iniciar MPU\r\n");
-  		Menu_Avisos(Aviso_fallo_comunicacion);
+  		Menu_LED(Aviso_fallo);
   		}
   }
   DEBUG_Imprimir("Exito al iniciar MPU\r\n");
-  Menu_Avisos(Aviso_ok);
+  Menu_LED(Aviso_ok);
+  HAL_Delay(2000);
 
   /* USER CODE END 2 */
 
@@ -211,18 +215,49 @@ int main(void)
 	  tiempoActual=HAL_GetTick();
 	  if ((tiempoActual-tiempoAnterior)>Delay_BTN) {
 		tiempoAnterior=tiempoActual;
-		HAL_ADC_Start_IT(&hadc1);// iniciamos conversion ADC
 		DEBUG_ADC(ADC_Sensor, ADC_buffer[0], ADC_buffer[1], ADC_buffer[2], ADC_buffer[3]);
+		HAL_ADC_Start_IT(&hadc1);// iniciamos conversion ADC
 	  }
 
-	  /* Obtenido el valor del BTN y siempre distinto a 0*/
+	  /*
+	   * Obtenido el valor del BTN y siempre distinto a 0
+	   * si entra a la funcion se genera un delay de tiempo para apagar los leds
+	   * */
 	  if(ValorBTN!=0)
 	  {
-		  Menu_Navegacion(ValorBTN);
+		  Menu_LED(Apagar_LED);
+		  timeValid=Menu_Navegacion(ValorBTN);
 		  ValorBTN=0;	// Se reetablece valor para evitar que vuelva a entrar
+		  tiempoAnterior_LED=HAL_GetTick();
+	  }
+	  if(timeValid==true)
+	  {
+		  tiempoActual=HAL_GetTick();
+		  if ((tiempoActual-tiempoAnterior_LED)>Delay_LED) {
+		  		timeValid=false;
+		  		Menu_LED(estadoLED);
+		  		}
 	  }
 	  /* Aca se ejecutara el codigo si se dio aceptar y dependiendo el menu donde este*/
-	  Menu_Ejecucion();
+	  if(Menu_Ejecucion()==true)
+	  {
+		  switch (Menu_Global) {
+				case Opcion_Iniciar_CodigoA:
+					break;
+				case Opcion_Calibracion_Sensores:
+					break;
+				case Opcion_Calibracion_X:
+					break;
+				case Opcion_Configuracion_PID_1:
+					break;
+				case Opcion_Configuracion_PID_2:
+					break;
+				case Opcion_Guardar:
+					break;
+				default:
+					break;
+		}
+	  }
   }
   /* USER CODE END 3 */
 }
