@@ -37,7 +37,7 @@
 #include "LIB_MENU.h"
 
 #define	Delay_BTN	200		// Tiempo para verificar los ADC por DMA
-#define Delay_LED	20		// Tiempo para apagar LEDs
+#define Delay_LED	50		// Tiempo para apagar LEDs
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
